@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlsn="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:lang="pt_BR" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layoutPadrao}">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Títulos</title>
+</head>
+
+<section layout:fragment="conteudo">
+    <form class="form-horizontal col-10" style="margin: auto; margin-top: 80px;"
+            th:action="${titulo.novo} ? @{/titulos} : @{/titulos/{titulo}(titulo=${titulo.codigo})}"
+            th:object="${titulo}" th:method="${titulo.novo} ? POST : PUT">
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+                th:if="${!#strings.isEmpty(mensagem)}">
+            <strong>Sucesso!</strong> O título foi salvo.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+        <div class="card" style="margin: auto">
+            <div class="card-header">
+                <ul class="nav card-header-tabs">
+                    <li class="nav-item">
+                        <h5>Novo título</h5>
+                    </li>
+                    <li class="nav-item" style="margin-left: auto;">
+                        <a class="nav-link" th:href="@{/titulos}">Listagem de títulos</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label class="col" for="descricao">Descrição</label>
+                        <div>
+                            <input type="text" class="form-control" th:field="*{descricao}" id="descricao"
+                                name="descricao"/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label class="col" for="dataVencimento">Data vencimento</label>
+                        <div>
+                            <input type="date" class="form-control" th:field="*{dataVencimento}" 
+                                id="dataVencimento" name="dataVencimento"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col" for="valor">Valor</label>
+                        <div>
+                            <input type="text" class="form-control" th:field="*{valor}" id="valor" 
+                                    th:value="${valor}" name="valor" onchange="this.value = this.value.replace(/,/g, '.')"/>
+                        </div>
+                    </div>  
+                    <div class="col">
+                        <label class="col" for="status">Status</label>
+                        <div>   
+                            <select title="status" class="form-select"  th:field="*{statusTitulo}" name="status">
+                                <option th:each="status : ${T(br.com.inteligir.cobranca.model.StatusTitulo).values()}"
+                                        th:value="${status}" th:text="${status.descricao}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" 
+                    style="margin-top: 15px; width: 150px;">Salvar</button>       
+            </div>
+        </div>
+    </form>
+</section>
+</html>
